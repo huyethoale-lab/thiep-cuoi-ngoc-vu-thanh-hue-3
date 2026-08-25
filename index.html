@@ -91,50 +91,106 @@ href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Ti%E1%BB%
 href="https://www.google.com/maps/search/?api=1&amp;query=Nh%C3%A0+V%C4%83n+H%C3%B3a+Th%C3%B4n+An+Chi%E1%BB%83u+1%2C+Ph%E1%BB%91+Hi%E1%BA%BFn%2C+H%C6%B0ng+Y%C3%AAn"
   </a>
 </section>
-<section class="page" id="guestbook">
-  <img src="page-12.png" alt="Sổ lưu bút">
-</section>
-</main>
+    <section class="section page12">
+      <img src="page-12.png" alt="Sổ lưu bút">
+      <form class="guest-form" id="guestForm">
+        <input id="guestName" autocomplete="name" aria-label="Nhập tên" placeholder="">
+        <textarea id="guestWish" aria-label="Nhập lời chúc" placeholder=""></textarea>
+        <button type="submit" aria-label="Gửi lời chúc">Gửi</button>
+      </form>
+    </section>
+  </main>
+  <div class="footer-note">Thiệp cưới của Ngọc Vũ & Thanh Huệ · 12.09.2026</div>
+</div>
+
 <div class="toast" id="toast"></div>
+<div class="modal" id="rsvpModal" role="dialog" aria-modal="true" aria-labelledby="rsvpTitle">
+  <form class="card" id="rsvpForm">
+    <h2 id="rsvpTitle">Xác nhận tham dự</h2>
+    <label for="rsvpName">Tên của bạn</label><input id="rsvpName" required>
+    <label for="rsvpStatus">Bạn có thể tham dự?</label>
+    <select id="rsvpStatus"><option value="yes">Có, mình sẽ tham dự</option><option value="no">Rất tiếc, mình không thể tham dự</option></select>
+    <label for="rsvpCount">Số người tham dự</label><input id="rsvpCount" type="number" min="1" max="10" value="1">
+    <label for="rsvpNote">Lời nhắn</label><textarea id="rsvpNote" rows="3"></textarea>
+    <div class="actions"><button type="button" class="secondary" id="closeRsvp">Đóng</button><button type="submit" class="primary">Gửi xác nhận</button></div>
+  </form>
+</div>
+
 <script>
-const intro = document.getElementById('intro');
-const stage = document.getElementById('stage');
-const frames = [...stage.querySelectorAll('img')];
-const hint = document.getElementById('hint');
+const frames=[...document.querySelectorAll('.intro img')];
+const seal=document.getElementById('seal'),cue=document.getElementById('scrollCue'),replay=document.getElementById('replay');
+let running=false;
+const waits=[450,650,600,700,780,950];
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+async function playIntro(){
+  if(running)return;
+  running=true; seal.classList.add('hidden'); cue.classList.remove('show'); replay.classList.remove('show');
+  for(let i=0;i<frames.length;i++){
+    frames.forEach((f,j)=>f.classList.toggle('active',i===j));
+    await sleep(waits[i]);
+  }
+  cue.classList.add('show'); replay.classList.add('show'); running=false;
+}
+seal.addEventListener('click',playIntro);
+replay.addEventListener('click',()=>{
+  frames.forEach((f,j)=>f.classList.toggle('active',j===0));
+  seal.classList.remove('hidden'); cue.classList.remove('show'); replay.classList.remove('show')
+});
+cue.addEventListener('click',()=>document.getElementById('content').scrollIntoView({behavior:'smooth'}));
 
-let running = false;
+const weddingTime=new Date('2026-09-12T09:00:00+07:00');
+function updateCountdown(){
+  let d=weddingTime-new Date(), el=document.getElementById('countdown');
+  if(d<=0){el.textContent='Hôm nay là ngày vui của chúng mình!';return}
+  const day=Math.floor(d/86400000); d%=86400000;
+  const h=Math.floor(d/3600000); d%=3600000;
+  const m=Math.floor(d/60000), s=Math.floor((d%60000)/1000);
+  el.textContent=`${day} ngày ${h} giờ ${m} phút ${s} giây`;
+}
+updateCountdown(); setInterval(updateCountdown,1000);
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+function toast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._x); t._x=setTimeout(()=>t.classList.remove('show'),2600)
 }
 
-async function playIntro() {
-  if (running) return;
+document.getElementById('addCalendar').addEventListener('click',()=>{
+  const ics=`BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Wedding Invitation//VI
+BEGIN:VEVENT
+UID:ngocvu-thanhhue-20260912@example.local
+DTSTAMP:20260823T000000Z
+DTSTART:20260912T020000Z
+SUMMARY:Tiệc cưới Ngọc Vũ & Thanh Huệ
+LOCATION:Nhà Văn Hóa Thôn An Chiểu 1, Phố Hiến, Hưng Yên
+DESCRIPTION:Trân trọng mời bạn đến chung vui cùng Ngọc Vũ và Thanh Huệ.
+END:VEVENT
+END:VCALENDAR`;
+  const blob=new Blob([ics],{type:'text/calendar;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='dam-cuoi-ngoc-vu-thanh-hue.ics'; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000); toast('Đã tạo lịch cưới để bạn lưu');
+});
 
-  running = true;
-  hint.style.display = 'none';
+const modal=document.getElementById('rsvpModal');
+document.getElementById('openRsvp').addEventListener('click',()=>modal.classList.add('show'));
+document.getElementById('closeRsvp').addEventListener('click',()=>modal.classList.remove('show'));
+modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('show')});
+document.getElementById('rsvpForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const data={name:rsvpName.value,status:rsvpStatus.value,count:rsvpCount.value,note:rsvpNote.value,at:new Date().toISOString()};
+  const arr=JSON.parse(localStorage.getItem('wedding-rsvp')||'[]'); arr.push(data);
+  localStorage.setItem('wedding-rsvp',JSON.stringify(arr)); modal.classList.remove('show'); e.target.reset();
+  toast('Cảm ơn bạn đã xác nhận 💌');
+});
 
-  for (let i = 1; i < frames.length; i++) {
-    frames.forEach((img, index) => {
-      img.classList.toggle('active', index === i);
-    });
-
-    await sleep(700);
-  }
-
-  await sleep(800);
-
-  intro.classList.add('done');
-  running = false;
-}
-
-stage.addEventListener('click', playIntro);
-
-stage.addEventListener('keydown', function(e) {
-  if (e.key === 'Enter' || e.key === ' ') {
-    e.preventDefault();
-    playIntro();
-  }
+document.getElementById('guestForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const name=document.getElementById('guestName').value.trim(),wish=document.getElementById('guestWish').value.trim();
+  if(!name||!wish){toast('Bạn nhập tên và lời chúc nhé');return}
+  const arr=JSON.parse(localStorage.getItem('wedding-wishes')||'[]'); arr.push({name,wish,at:new Date().toISOString()});
+  localStorage.setItem('wedding-wishes',JSON.stringify(arr)); e.target.reset();
+  toast('Đã gửi lời chúc. Cảm ơn bạn! ❤️');
 });
 </script>
 </body>
