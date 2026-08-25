@@ -110,8 +110,8 @@ function sleep(ms) {
 
 async function playIntro() {
   if (running) return;
-  running = true;
 
+  running = true;
   hint.style.display = 'none';
 
   for (let i = 1; i < frames.length; i++) {
@@ -130,17 +130,12 @@ async function playIntro() {
 
 stage.addEventListener('click', playIntro);
 
-stage.addEventListener('keydown', e => {
+stage.addEventListener('keydown', function(e) {
   if (e.key === 'Enter' || e.key === ' ') {
     e.preventDefault();
     playIntro();
   }
 });
-function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2400)}
-
-
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-});
-
 </script>
-</body></html>
+</body>
+</html>
