@@ -11,7 +11,7 @@
 #intro.done{opacity:0;visibility:hidden;pointer-events:none}.stage{position:relative;width:min(100vw,520px);height:100svh;max-height:calc(100vw * 1748 / 1240);overflow:hidden;background:#f7eee7;box-shadow:0 0 40px #0002;cursor:pointer}.stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity .55s ease}.stage img.active{opacity:1}.hint{position:absolute;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);padding:9px 16px;border-radius:99px;background:#65090dcc;color:#fff;font-size:14px;letter-spacing:.03em;white-space:nowrap;z-index:3;box-shadow:0 4px 18px #0003;animation:pulse 1.7s infinite}@keyframes pulse{50%{transform:translateX(-50%) scale(1.04)}}
 main{width:min(100%,620px);margin:auto;background:#f8efe8;box-shadow:0 0 30px #0001}.page{position:relative;line-height:0}.page img{display:block;width:100%;height:auto;margin:0;padding:0}.hotspot{position:absolute;display:block;border-radius:16px;background:transparent;cursor:pointer}.calendar{left:29%;top:79%;width:42%;height:7%}.rsvp{left:29%;top:86%;width:42%;height:7%}.map{left:15%;top:37%;width:70%;height:52%}.guest{left:39%;top:55%;width:38%;height:8%}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);z-index:80;background:#65090d;color:#fff;padding:11px 16px;border-radius:999px;opacity:0;pointer-events:none;transition:.25s;box-shadow:0 5px 22px #0003;font:14px Arial,sans-serif}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-@media(min-width:700px){body{padding:24px 0}.stage{height:min(100svh,735px)}main{border-radius:4px;overflow:hidden}}
+@media(min-width:700px){body{padding:24px 0}.stage{height:min(100svh,735px)}main{border-radius:4px;overflow:visible}}
 @media(prefers-reduced-motion:reduce){.stage img,#intro,.toast{transition:none}.hint{animation:none}}
 .page{
   position:relative;
@@ -95,7 +95,7 @@ href="https://www.google.com/maps/search/?api=1&amp;query=Nh%C3%A0+V%C4%83n+H%C3
   </a>
 </section>
 <section class="page" id="guestbook">
- <img src="assets/page-12.png" alt="Sổ lưu bút">
+ <img src="page-12.png" alt="Sổ lưu bút">
   <a
     class="hotspot guest"
     id="guestBtn"
