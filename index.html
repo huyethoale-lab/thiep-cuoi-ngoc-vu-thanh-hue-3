@@ -39,21 +39,18 @@ main{width:min(100%,620px);margin:auto;background:#f8efe8;box-shadow:0 0 30px #0
   z-index:30;
   pointer-events:auto;
 }
-#guestbook{
+.page{
   position:relative;
-  width:100%;
-  margin:0;
-  padding:0;
 }
 
-#guestbook > img{
+.page img{
   display:block;
   width:100%;
-  max-width:none;
   height:auto;
   margin:0;
   padding:0;
-}</style>
+}
+</style>
 </head>
 <body>
 <div id="intro" aria-label="Mở thiệp cưới">
@@ -94,7 +91,7 @@ href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Ti%E1%BB%
 href="https://www.google.com/maps/search/?api=1&amp;query=Nh%C3%A0+V%C4%83n+H%C3%B3a+Th%C3%B4n+An+Chi%E1%BB%83u+1%2C+Ph%E1%BB%91+Hi%E1%BA%BFn%2C+H%C6%B0ng+Y%C3%AAn"
   </a>
 </section>
-<section class="section page12" id="guestbook">
+<section class="page" id="guestbook">
   <img src="page-12.png" alt="Sổ lưu bút">
 </section>
 </main>
@@ -140,40 +137,10 @@ stage.addEventListener('keydown', e => {
   }
 });
 function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2400)}
-document.getElementById('calendarBtn').addEventListener('click', function(e) {
-  e.preventDefault();
 
-  const icsContent = `BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//Ngoc Vu Thanh Hue Wedding//VI
-BEGIN:VEVENT
-UID:ngoc-vu-thanh-hue-12092026
-DTSTAMP:20260825T000000Z
-DTSTART:20260912T020000Z
-DTEND:20260912T050000Z
-SUMMARY:Tiệc cưới Ngọc Vũ & Thanh Huệ
-LOCATION:Nhà Văn Hóa Thôn An Chiểu 1, Phố Hiến, Hưng Yên
-DESCRIPTION:Trân trọng mời bạn đến tham dự tiệc cưới của Ngọc Vũ và Thanh Huệ.
-END:VEVENT
-END:VCALENDAR`;
-
-  const blob = new Blob([icsContent], {
-    type: 'text/calendar;charset=utf-8'
-  });
-
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-
-  link.href = url;
-  link.download = 'Dam-cuoi-Ngoc-Vu-Thanh-Hue.ics';
-
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
 
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 });
-document.getElementById('rsvpBtn').addEventListener('click',()=>toast('Kéo xuống Sổ lưu bút để phản hồi'));
-document.getElementById('guestBtn').addEventListener('click',e=>{e.preventDefault();toast('Phần gửi lời chúc cần nối với biểu mẫu/Google Sheet')});
+
 </script>
 </body></html>
